@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pelacak Lokasi HP</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; }
+        #status { color: blue; font-weight: bold; }
+        .map-link { display: none; margin-top: 20px; text-decoration: none; color: white; background: red; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h2>Lacak Lokasi Perangkat Ini</h2>
+    <button onclick="lacakHP()">Mulai Pelacakan</button>
+    
+    <p id="status">Klik tombol untuk mendapatkan koordinat.</p>
+    <a id="mapLink" class="map-link" target="_blank">Lihat di Google Maps</a>
+
+    <script>
+        function lacakHP() {
+            const status = document.getElementById('status');
+            const mapLink = document.getElementById('mapLink');
+
+            if (!navigator.geolocation) {
+                status.innerText = "Browser kamu tidak mendukung GPS.";
+            } else {
+                status.innerText = "Sedang mencari lokasi...";
+                
+                // Mengambil koordinat
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        
+                        status.innerHTML = `Lokasi Ditemukan!<br>Lat: ${lat} <br>Lon: ${lon}`;
+                        
+                        // Buat link ke Google Maps
+                        mapLink.href = `https://www.google.com/maps?q=${lat},${lon}`;
+                        mapLink.style.display = "inline-block";
+                    },
+                    () => {
+                        status.innerText = "Gagal mendapatkan lokasi. Pastikan GPS aktif.";
+                    }
+                );
+            }
+        }
+    </script>
+</body>
+</html>
